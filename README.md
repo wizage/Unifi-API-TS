@@ -331,9 +331,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- 📖 [API Documentation](https://your-docs-url.com)
-- 🐛 [Issue Tracker](https://github.com/your-repo/issues)
-- 💬 [Discussions](https://github.com/your-repo/discussions)
+- 📖 [API Documentation](https://wizage.github.io/Unifi-API-TS/)
+- 🐛 [Issue Tracker](https://github.com/wizage/Unifi-API-TS/issues)
+- 💬 [Discussions](https://github.com/wizage/Unifi-API-TS/discussions)
 
 ---
 

@@ -39,12 +39,6 @@ pids/
 .env.test.local
 .env.production.local
 
-# Generated Documentation (keep .md files, ignore generated HTML)
-docs/*.html
-docs/assets/
-docs/classes/
-docs/interfaces/
-docs/types/
-docs/modules/
-docs/.nojekyll
+# Generated Documentation (keep manual files, ignore generated API docs)
+docs/api/
 

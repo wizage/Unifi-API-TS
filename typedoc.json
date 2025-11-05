@@ -2,7 +2,7 @@
   "entryPoints": [
     "src/index.ts"
   ],
-  "out": "docs",
+  "out": "docs/api",
   "name": "UniFi API TypeScript Client",
   "readme": "README.md",
   "theme": "default",
@@ -44,7 +44,5 @@
   },
   "gitRevision": "main",
   "gitRemote": "origin",
-  "sourceLinkTemplate": "https://github.com/your-username/unifi-api-typescript/blob/{gitRevision}/{path}#L{line}",
-  "customCss": "./docs/custom.css",
-  "favicon": "./docs/favicon.ico"
+  "sourceLinkTemplate": "https://github.com/your-username/unifi-api-typescript/blob/{gitRevision}/{path}#L{line}"
 }

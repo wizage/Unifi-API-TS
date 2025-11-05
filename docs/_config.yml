@@ -1,7 +1,7 @@
 title: UniFi API TypeScript Client
 description: A comprehensive TypeScript client for UniFi Controller API with full type safety and extensive API coverage
-url: "https://your-username.github.io"
-baseurl: "/unifi-api-typescript"
+url: "https://wizage.github.io"
+baseurl: "/Unifi-API-TS"
 
 # Build settings
 markdown: kramdown
@@ -19,20 +19,20 @@ header_pages:
   - index.md
 
 # Social links
-github_username: your-username
-twitter_username: your-twitter
+github_username: wizage
+twitter_username: wizages
 
 # SEO
-author: Your Name
+author: wizages
 twitter:
-  username: your-twitter
+  username: wizages
   card: summary
 
 social:
   name: Your Name
   links:
-    - https://twitter.com/your-twitter
-    - https://github.com/your-username
+    - https://twitter.com/wizages
+    - https://github.com/wizage
 
 # Exclude from processing
 exclude:

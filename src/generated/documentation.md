@@ -347,7 +347,7 @@ function isUniFiNetwork(obj: any): obj is UniFiNetwork;
 ### Basic Client Setup
 
 ```typescript
-import { UniFiClient, UniFiClientConfig } from 'unifi-api-typescript';
+import { UniFiClient, UniFiClientConfig } from 'unifi-api-ts';
 
 const config: UniFiClientConfig = {
   baseUrl: 'https://unifi.example.com:8443',

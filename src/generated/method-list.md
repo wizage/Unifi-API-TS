@@ -106,7 +106,7 @@ controller.abort();
 ## Usage Example
 
 ```typescript
-import { UniFiClient } from 'unifi-api-typescript';
+import { UniFiClient } from 'unifi-api-ts';
 
 const client = new UniFiClient({
   baseUrl: 'https://unifi.example.com:8443',

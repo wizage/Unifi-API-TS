@@ -2,7 +2,7 @@
 
 A comprehensive TypeScript client for the UniFi Controller API, providing type-safe access to all UniFi network management functionality. This library is a complete TypeScript port of the popular PHP UniFi-API-client, offering the same extensive feature set with modern TypeScript benefits.
 
-[![npm version](https://badge.fury.io/js/unifi-api-typescript.svg)](https://badge.fury.io/js/unifi-api-typescript)
+[![npm version](https://badge.fury.io/js/unifi-api-ts.svg)](https://badge.fury.io/js/unifi-api-ts)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -21,21 +21,21 @@ A comprehensive TypeScript client for the UniFi Controller API, providing type-s
 ## Installation
 
 ```bash
-npm install unifi-api-typescript
+npm install unifi-api-ts
 ```
 
 ```bash
-yarn add unifi-api-typescript
+yarn add unifi-api-ts
 ```
 
 ```bash
-pnpm add unifi-api-typescript
+pnpm add unifi-api-ts
 ```
 
 ## Quick Start
 
 ```typescript
-import { UniFiClient } from 'unifi-api-typescript';
+import { UniFiClient } from 'unifi-api-ts';
 
 // Create client instance
 const client = new UniFiClient({
@@ -181,7 +181,7 @@ import {
   APIError, 
   TimeoutError,
   ConfigurationError 
-} from 'unifi-api-typescript';
+} from 'unifi-api-ts';
 
 try {
   await client.login();
@@ -269,7 +269,7 @@ const corporateSite = new UniFiClient({
 This library is written in TypeScript and provides comprehensive type definitions:
 
 ```typescript
-import { UniFiDevice, UniFiClient, DeviceConfig } from 'unifi-api-typescript';
+import { UniFiDevice, UniFiClient, DeviceConfig } from 'unifi-api-ts';
 
 // All API responses are fully typed
 const devices: UniFiDevice[] = await client.listDevices();

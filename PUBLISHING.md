@@ -111,7 +111,7 @@ When creating releases, include:
 
 After publishing:
 
-1. **Verify Publication**: Check that the package appears on [npmjs.com](https://www.npmjs.com/package/unifi-api-typescript)
+1. **Verify Publication**: Check that the package appears on [npmjs.com](https://www.npmjs.com/package/unifi-api-ts)
 2. **Test Installation**: Test installing the package in a fresh project
 3. **Update Documentation**: Ensure all documentation reflects the new version
 4. **Announce**: Announce the release in relevant channels
@@ -130,7 +130,7 @@ After publishing:
 If you need to unpublish a version (within 24 hours):
 
 ```bash
-npm unpublish unifi-api-typescript@<version>
+npm unpublish unifi-api-ts@<version>
 ```
 
 **Note**: Unpublishing should only be used in emergencies as it can break dependent projects.

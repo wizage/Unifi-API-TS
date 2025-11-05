@@ -1,14 +1,14 @@
 {
-  "name": "unifi-api-typescript",
+  "name": "unifi-api-ts",
   "version": "1.0.0",
   "description": "TypeScript client for UniFi Controller API, converted from the PHP UniFi-API-client",
-  "homepage": "https://github.com/your-username/unifi-api-typescript#readme",
+  "homepage": "https://github.com/wizage/Unifi-API-TS#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/unifi-api-typescript.git"
+    "url": "git+https://github.com/wizage/Unifi-API-TS.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/unifi-api-typescript/issues"
+    "url": "https://github.com/wizage/Unifi-API-TS/issues"
   },
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",

@@ -37,12 +37,12 @@
   ],
   "searchInComments": true,
   "cleanOutputDir": true,
-  "titleLink": "https://github.com/your-username/unifi-api-typescript",
+  "titleLink": "https://github.com/wizage/Unifi-API-TS",
   "navigationLinks": {
-    "GitHub": "https://github.com/your-username/unifi-api-typescript",
-    "NPM": "https://www.npmjs.com/package/unifi-api-typescript"
+    "GitHub": "https://github.com/wizage/Unifi-API-TS",
+    "NPM": "https://www.npmjs.com/package/unifi-api-ts"
   },
   "gitRevision": "main",
   "gitRemote": "origin",
-  "sourceLinkTemplate": "https://github.com/your-username/unifi-api-typescript/blob/{gitRevision}/{path}#L{line}"
+  "sourceLinkTemplate": "https://github.com/wizage/Unifi-API-TS/blob/{gitRevision}/{path}#L{line}"
 }

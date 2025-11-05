@@ -7,7 +7,7 @@
  * 
  * @example
  * ```typescript
- * import { UniFiClient } from 'unifi-api-typescript';
+ * import { UniFiClient } from 'unifi-api-ts';
  * 
  * const client = new UniFiClient({
  *   baseUrl: 'https://unifi.example.com:8443',
@@ -72,29 +72,29 @@ export class UniFiClient extends GeneratedAPIMethods {
   constructor(config: UniFiClientConfig) {
     // Validate config first
     UniFiClient.validateConfig(config);
-    
+
     // Initialize HTTP client
     const httpConfig: HTTPClientConfig = {
       baseURL: config.baseUrl
     };
-    
+
     if (config.timeout !== undefined) {
       httpConfig.timeout = config.timeout;
     }
-    
+
     if (config.verifySsl !== undefined) {
       httpConfig.verifySsl = config.verifySsl;
     }
-    
+
     if (config.debug !== undefined) {
       httpConfig.debug = config.debug;
     }
-    
+
     const httpClient = new HTTPClient(httpConfig);
-    
+
     // Call parent constructor with HTTP client
     super(httpClient);
-    
+
     // Now set instance properties
     this.config = config;
     this.sessionManager = new SessionManager(httpClient, config);

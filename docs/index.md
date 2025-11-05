@@ -10,11 +10,11 @@ Welcome to the comprehensive documentation for the UniFi API TypeScript Client l
 ## 🚀 Quick Start
 
 ```bash
-npm install unifi-api-typescript
+npm install unifi-api-ts
 ```
 
 ```typescript
-import { UniFiClient } from 'unifi-api-typescript';
+import { UniFiClient } from 'unifi-api-ts';
 
 const client = new UniFiClient({
   baseUrl: 'https://unifi.example.com:8443',
@@ -38,14 +38,14 @@ Complete TypeScript API documentation generated from source code with TypeDoc:
 - Return types and examples
 - JSDoc comments and usage notes
 
-### [🔧 Examples](https://github.com/your-username/unifi-api-typescript/tree/main/examples)
+### [🔧 Examples](https://github.com/wizage/Unifi-API-TS/tree/main/examples)
 Practical examples demonstrating common use cases:
 - Basic authentication and device management
 - Guest network operations
 - Error handling patterns
 - Request cancellation
 
-### [📋 API Coverage](https://github.com/your-username/unifi-api-typescript/blob/main/API_COVERAGE_ANALYSIS.md)
+### [📋 API Coverage](https://github.com/wizage/Unifi-API-TS/blob/main/API_COVERAGE_ANALYSIS.md)
 Comprehensive analysis of supported UniFi Controller API endpoints
 
 ## ✨ Features
@@ -71,8 +71,8 @@ The library is built with a modular architecture:
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please see our [Contributing Guide](https://github.com/your-username/unifi-api-typescript/blob/main/CONTRIBUTING.md) for details.
+Contributions are welcome! Please see our [Contributing Guide](https://github.com/wizage/Unifi-API-TS/blob/main/CONTRIBUTING.md) for details.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/your-username/unifi-api-typescript/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/wizage/Unifi-API-TS/blob/main/LICENSE) file for details.

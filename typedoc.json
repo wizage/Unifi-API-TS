@@ -1,6 +1,8 @@
 {
-  "entryPoints": ["src/index.ts"],
-  "out": "docs/api",
+  "entryPoints": [
+    "src/index.ts"
+  ],
+  "out": "docs",
   "name": "UniFi API TypeScript Client",
   "readme": "README.md",
   "theme": "default",
@@ -13,13 +15,15 @@
   "categoryOrder": [
     "Client",
     "HTTP",
-    "Session Management", 
+    "Session Management",
     "Types",
     "Errors",
     "Generated API Methods",
     "*"
   ],
-  "sort": ["source-order"],
+  "sort": [
+    "source-order"
+  ],
   "kindSortOrder": [
     "Class",
     "Constructor",
@@ -33,12 +37,14 @@
   ],
   "searchInComments": true,
   "cleanOutputDir": true,
-  "titleLink": "https://github.com/your-repo/unifi-api-typescript",
+  "titleLink": "https://github.com/your-username/unifi-api-typescript",
   "navigationLinks": {
-    "GitHub": "https://github.com/your-repo/unifi-api-typescript",
+    "GitHub": "https://github.com/your-username/unifi-api-typescript",
     "NPM": "https://www.npmjs.com/package/unifi-api-typescript"
   },
   "gitRevision": "main",
   "gitRemote": "origin",
-  "sourceLinkTemplate": "https://github.com/your-repo/unifi-api-typescript/blob/{gitRevision}/{path}#L{line}"
+  "sourceLinkTemplate": "https://github.com/your-username/unifi-api-typescript/blob/{gitRevision}/{path}#L{line}",
+  "customCss": "./docs/custom.css",
+  "favicon": "./docs/favicon.ico"
 }

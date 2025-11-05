@@ -37,6 +37,8 @@
     "lint:ci": "eslint src/**/*.ts --max-warnings 0",
     "docs": "typedoc src/index.ts --out docs",
     "docs:serve": "npx http-server docs -p 8080",
+    "docs:build": "npm run build && npm run docs",
+    "docs:clean": "rm -rf docs/*.html docs/assets docs/classes docs/interfaces docs/types docs/modules",
     "typecheck": "tsc --noEmit",
     "validate": "npm run typecheck && npm run lint:ci && npm run test:ci",
     "prepublishOnly": "npm run validate && npm run build",

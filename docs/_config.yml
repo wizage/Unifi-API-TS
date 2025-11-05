@@ -1,0 +1,42 @@
+title: UniFi API TypeScript Client
+description: A comprehensive TypeScript client for UniFi Controller API with full type safety and extensive API coverage
+url: "https://your-username.github.io"
+baseurl: "/unifi-api-typescript"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# GitHub Pages settings
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Navigation
+header_pages:
+  - index.md
+
+# Social links
+github_username: your-username
+twitter_username: your-twitter
+
+# SEO
+author: Your Name
+twitter:
+  username: your-twitter
+  card: summary
+
+social:
+  name: Your Name
+  links:
+    - https://twitter.com/your-twitter
+    - https://github.com/your-username
+
+# Exclude from processing
+exclude:
+  - node_modules/
+  - package.json
+  - package-lock.json
+  - README.md

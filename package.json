@@ -1,0 +1,98 @@
+{
+  "name": "unifi-api-typescript",
+  "version": "1.0.0",
+  "description": "TypeScript client for UniFi Controller API, converted from the PHP UniFi-API-client",
+  "homepage": "https://github.com/your-username/unifi-api-typescript#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/unifi-api-typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/unifi-api-typescript/issues"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "clean": "rm -rf dist coverage",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "test:run": "jest --run",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "lint:ci": "eslint src/**/*.ts --max-warnings 0",
+    "docs": "typedoc src/index.ts --out docs",
+    "docs:serve": "npx http-server docs -p 8080",
+    "typecheck": "tsc --noEmit",
+    "validate": "npm run typecheck && npm run lint:ci && npm run test:ci",
+    "prepublishOnly": "npm run validate && npm run build",
+    "prepack": "npm run build",
+    "release:patch": "npm version patch && git push && git push --tags",
+    "release:minor": "npm version minor && git push && git push --tags",
+    "release:major": "npm version major && git push && git push --tags",
+    "pack:test": "npm pack && tar -tzf *.tgz"
+  },
+  "keywords": [
+    "unifi",
+    "ubiquiti",
+    "api",
+    "client",
+    "typescript",
+    "controller",
+    "network",
+    "wifi",
+    "networking",
+    "management",
+    "automation",
+    "iot"
+  ],
+  "author": "UniFi API TypeScript Converter",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "axios-cookiejar-support": "^6.0.4",
+    "glob": "^11.0.3",
+    "simple-git": "^3.30.0",
+    "tough-cookie": "^4.1.3"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "@types/tough-cookie": "^4.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.0",
+    "typedoc": "^0.25.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

@@ -75,5 +75,5 @@ jobs:
     - name: Test package installation
       run: |
         npm pack
-        npm install -g ./unifi-api-typescript-*.tgz
-        node -e "require('unifi-api-typescript')"
+        npm install -g ./unifi-api-ts-*.tgz
+        node -e "require('unifi-api-ts')"

@@ -1,6 +1,6 @@
 {
   "name": "unifi-api-ts",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "TypeScript client for UniFi Controller API, converted from the PHP UniFi-API-client",
   "homepage": "https://github.com/wizage/Unifi-API-TS#readme",
   "repository": {

@@ -19,6 +19,7 @@
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { CookieJar } from 'tough-cookie';
+import { Agent as HttpsAgent } from 'https';
 
 // Import axios-cookiejar-support (using named import for ESM compatibility)
 import * as axiosCookieJarSupport from 'axios-cookiejar-support';
@@ -57,21 +58,27 @@ export class HTTPClient {
     this.cookieJar = new CookieJar();
     this.debug = config.debug || false;
     
-    // Create axios instance with cookie support
-    this.client = wrapper(axios.create({
+    // Create HTTPS agent if SSL verification is disabled
+    const httpsAgent = config.verifySsl === false ? new HttpsAgent({
+      rejectUnauthorized: false
+    }) : undefined;
+    
+    // Create axios instance with proper agent configuration
+    const axiosInstance = axios.create({
       baseURL: config.baseURL,
       timeout: config.timeout || 30000,
-      httpsAgent: config.verifySsl === false ? {
-        rejectUnauthorized: false
-      } : undefined,
       withCredentials: true,
+      httpsAgent,
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': 'UniFi-API-TypeScript-Client/1.0.0'
       }
-    }));
+    });
 
-    // Set cookie jar after creation
+    // Apply cookie jar wrapper
+    this.client = wrapper(axiosInstance);
+
+    // Set cookie jar
     (this.client.defaults as any).jar = this.cookieJar;
 
     this.setupInterceptors();

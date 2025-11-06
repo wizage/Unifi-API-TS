@@ -59,17 +59,32 @@ describe('HTTPClient', () => {
       expect(client).toBeInstanceOf(HTTPClient);
     });
 
+    it('should not create httpsAgent when verifySsl is true', () => {
+      const sslConfig = {
+        baseURL: 'https://test.local:8443',
+        verifySsl: true
+      };
+      
+      new HTTPClient(sslConfig);
+      
+      const call = mockedAxios.create.mock.calls[mockedAxios.create.mock.calls.length - 1]?.[0];
+      expect(call?.httpsAgent).toBeUndefined();
+    });
+
     it('should create axios instance with correct config', () => {
-      expect(mockedAxios.create).toHaveBeenCalledWith({
-        baseURL: config.baseURL,
-        timeout: config.timeout,
-        httpsAgent: { rejectUnauthorized: false },
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'UniFi-API-TypeScript-Client/1.0.0'
-        }
+      const call = mockedAxios.create.mock.calls[0]?.[0];
+      
+      expect(call?.baseURL).toBe(config.baseURL);
+      expect(call?.timeout).toBe(config.timeout);
+      expect(call?.withCredentials).toBe(true);
+      expect(call?.headers).toEqual({
+        'Content-Type': 'application/json',
+        'User-Agent': 'UniFi-API-TypeScript-Client/1.0.0'
       });
+      
+      // Check that httpsAgent is properly configured when verifySsl is false
+      expect(call?.httpsAgent).toBeDefined();
+      expect((call?.httpsAgent as any)?.options?.rejectUnauthorized).toBe(false);
     });
 
     it('should setup interceptors', () => {

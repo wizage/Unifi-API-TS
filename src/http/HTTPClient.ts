@@ -20,8 +20,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { CookieJar } from 'tough-cookie';
 
-// Import axios-cookiejar-support
-const axiosCookieJarSupport = require('axios-cookiejar-support');
+// Import axios-cookiejar-support (using named import for ESM compatibility)
+import * as axiosCookieJarSupport from 'axios-cookiejar-support';
 const { wrapper } = axiosCookieJarSupport;
 import { RequestOptions } from '../types/config';
 import { APIResponse } from '../types/api';

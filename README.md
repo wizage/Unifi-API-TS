@@ -1,5 +1,8 @@
 # UniFi API TypeScript Client
 
+> [!NOTE]
+> This was created with Kiro and might have some bugs
+
 A comprehensive TypeScript client for the UniFi Controller API, providing type-safe access to all UniFi network management functionality. This library is a complete TypeScript port of the popular PHP UniFi-API-client, offering the same extensive feature set with modern TypeScript benefits.
 
 [![npm version](https://badge.fury.io/js/unifi-api-ts.svg)](https://badge.fury.io/js/unifi-api-ts)

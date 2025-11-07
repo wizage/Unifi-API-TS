@@ -870,8 +870,8 @@ export class UniFiClient {
     return this.deviceManagementAPI.rename_ap(ap_id, ap_name, options);
   }
 
-  async restartAp(options?: { signal?: AbortSignal }): Promise<boolean> {
-    return this.deviceManagementAPI.restart_ap(options);
+  async restartAp(): Promise<boolean> {
+    return this.deviceManagementAPI.restart_ap();
   }
 
   async restartDevice(macs: string | string[], reboot_type: 'soft' | 'hard' = 'soft', options?: { signal?: AbortSignal }): Promise<boolean> {

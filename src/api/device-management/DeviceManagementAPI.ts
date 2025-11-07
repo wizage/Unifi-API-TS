@@ -9,7 +9,7 @@
  */
 
 import { HTTPClient } from '../../http/HTTPClient';
-import { UniFiDevice, AdvancedAdoptConfig } from '../../types';
+import { UniFiDevice } from '../../types';
 
 export class DeviceManagementAPI {
     constructor(private httpClient: HTTPClient) {}
@@ -1119,7 +1119,7 @@ export class DeviceManagementAPI {
      * 
      * PHP: restart_ap() -> throw new MethodDeprecatedException('Function restart_ap() has been deprecated, use restart_device() instead.');
      */
-    async restart_ap(options?: { signal?: AbortSignal }): Promise<boolean> {
+    async restart_ap(): Promise<boolean> {
         throw new Error('Function restart_ap() has been deprecated, use restart_device() instead.');
     }
 
@@ -1458,9 +1458,7 @@ export class DeviceManagementAPI {
      * 
      * PHP: unset_locate_ap() -> throw new MethodDeprecatedException('Function unset_locate_ap() has been deprecated, use locate_ap() instead.');
      */
-    async unset_locate_ap(
-        options?: { signal?: AbortSignal }
-    ): Promise<never> {
+    async unset_locate_ap(): Promise<never> {
         throw new Error('Function unset_locate_ap() has been deprecated, use locate_ap() instead.');
     }
 

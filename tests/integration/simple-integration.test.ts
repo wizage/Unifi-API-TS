@@ -64,7 +64,7 @@ describe('UniFi Client Simple Integration Tests', () => {
       expect(client.isAuthenticated()).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
         method: 'POST',
-        url: '/api/login',
+        url: '/api/auth/login',
         data: {
           username: 'admin',
           password: 'password',
@@ -138,7 +138,7 @@ describe('UniFi Client Simple Integration Tests', () => {
         }
       });
 
-      const devices = await client.listDevices();
+      const devices = await client.list_devices();
       
       expect(devices).toEqual(mockDevices);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith(
@@ -153,14 +153,14 @@ describe('UniFi Client Simple Integration Tests', () => {
       const apiError = new APIError('Bad Request', 400);
       mockAxiosInstance.request.mockRejectedValue(apiError);
 
-      await expect(client.listDevices()).rejects.toThrow(APIError);
+      await expect(client.list_devices()).rejects.toThrow(APIError);
     });
 
     it('should handle network errors', async () => {
       const networkError = new NetworkError('Connection failed');
       mockAxiosInstance.request.mockRejectedValue(networkError);
 
-      await expect(client.listDevices()).rejects.toThrow(NetworkError);
+      await expect(client.list_devices()).rejects.toThrow(NetworkError);
     });
   });
 
@@ -191,7 +191,7 @@ describe('UniFi Client Simple Integration Tests', () => {
       // Cancel the request
       abortController.abort();
 
-      await expect(client.listDevices(undefined, { signal: abortController.signal }))
+      await expect(client.list_devices(undefined, { signal: abortController.signal }))
         .rejects.toThrow('Request was cancelled');
     });
   });
@@ -232,8 +232,8 @@ describe('UniFi Client Simple Integration Tests', () => {
           data: { data: [{ id: 2 }], meta: { rc: 'ok' } }
         });
 
-      const result1 = await client.listDevices();
-      const result2 = await client.listUsers();
+      const result1 = await client.list_devices();
+      const result2 = await client.list_users();
       
       expect(result1).toEqual([{ id: 1 }]);
       expect(result2).toEqual([{ id: 2 }]);

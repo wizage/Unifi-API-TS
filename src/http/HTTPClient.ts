@@ -19,7 +19,7 @@
 
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { CookieJar } from 'tough-cookie';
-import { Agent as HttpsAgent } from 'https';
+// import { Agent as HttpsAgent } from 'https';
 
 // Import axios-cookiejar-support (using named import for ESM compatibility)
 import * as axiosCookieJarSupport from 'axios-cookiejar-support';
@@ -58,36 +58,44 @@ export class HTTPClient {
     this.cookieJar = new CookieJar();
     this.debug = config.debug || false;
     
-    // Create HTTPS agent if SSL verification is disabled
-    const httpsAgent = config.verifySsl === false ? new HttpsAgent({
-      rejectUnauthorized: false
-    }) : undefined;
-    
-    // Create axios instance with proper agent configuration
+    // Create axios instance WITHOUT custom agents to avoid conflicts with cookie jar
     const axiosInstance = axios.create({
       baseURL: config.baseURL,
       timeout: config.timeout || 30000,
       withCredentials: true,
-      httpsAgent,
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': 'UniFi-API-TypeScript-Client/1.0.0'
       }
     });
 
-    // Apply cookie jar wrapper
+    // Apply cookie jar wrapper first
     this.client = wrapper(axiosInstance);
 
     // Set cookie jar
     (this.client.defaults as any).jar = this.cookieJar;
 
+    // Store SSL verification preference
+    (this as any)._verifySsl = config.verifySsl !== false;
+    
+    // Handle SSL verification by setting Node.js environment variable
+    // This affects all HTTPS connections made by this process
+    if (config.verifySsl === false) {
+      // Store original value to restore later if needed
+      (this as any)._originalTlsRejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    }
+
     this.setupInterceptors();
   }
 
   private setupInterceptors(): void {
-    // Request interceptor for debugging
+    // Request interceptor for debugging and SSL configuration
     this.client.interceptors.request.use(
       (config) => {
+        // SSL verification is handled by setting process.env.NODE_TLS_REJECT_UNAUTHORIZED
+        // when verifySsl is false, which affects all HTTPS connections
+        
         if (this.debug) {
           console.log(`[HTTP] ${config.method?.toUpperCase()} ${config.url}`);
           if (config.data) {
@@ -117,7 +125,16 @@ export class HTTPClient {
         if (this.debug) {
           console.error('[HTTP] Response error:', error.message);
           if (error.response) {
-            console.error('[HTTP] Error response:', error.response.data);
+            console.error('[HTTP] Status:', error.response.status);
+            console.error('[HTTP] Status text:', error.response.statusText);
+            console.error('[HTTP] Headers:', error.response.headers);
+            console.error('[HTTP] Error response data:', error.response.data);
+            
+            // Special handling for 401 errors to get more details
+            if (error.response.status === 401) {
+              console.error('[HTTP] === 401 UNAUTHORIZED DETAILS ===');
+              console.error('[HTTP] Full response:', JSON.stringify(error.response.data, null, 2));
+            }
           }
         }
         return Promise.reject(this.handleError(error));
@@ -356,5 +373,22 @@ export class HTTPClient {
    */
   clearCookies(): void {
     this.cookieJar.removeAllCookiesSync();
+  }
+
+  /**
+   * Restores the original SSL verification settings
+   * 
+   * This restores the NODE_TLS_REJECT_UNAUTHORIZED environment variable
+   * to its original value if it was modified during construction.
+   */
+  restoreSSLSettings(): void {
+    const originalValue = (this as any)._originalTlsRejectUnauthorized;
+    if (originalValue !== undefined) {
+      if (originalValue === null) {
+        delete process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+      } else {
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = originalValue;
+      }
+    }
   }
 }

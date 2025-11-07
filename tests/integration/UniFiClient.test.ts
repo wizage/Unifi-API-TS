@@ -48,6 +48,38 @@ describe('UniFiClient Integration Tests', () => {
     client = new UniFiClient(config);
   });
 
+  describe('Modular API Structure', () => {
+    it('should initialize all API modules', () => {
+      expect(client.getAuthenticationAPI()).toBeDefined();
+      expect(client.getDeviceManagementAPI()).toBeDefined();
+      expect(client.getClientManagementAPI()).toBeDefined();
+      expect(client.getNetworkManagementAPI()).toBeDefined();
+      expect(client.getSiteManagementAPI()).toBeDefined();
+      expect(client.getUserManagementAPI()).toBeDefined();
+      expect(client.getSecurityAPI()).toBeDefined();
+      expect(client.getStatisticsAPI()).toBeDefined();
+    });
+
+    it('should delegate authentication methods to authentication API', async () => {
+      const authAPI = client.getAuthenticationAPI();
+      const loginSpy = jest.spyOn(authAPI, 'login').mockResolvedValue(true);
+      const logoutSpy = jest.spyOn(authAPI, 'logout').mockResolvedValue(true);
+      const isAuthSpy = jest.spyOn(authAPI, 'isAuthenticated').mockReturnValue(true);
+
+      await client.login();
+      await client.logout();
+      client.isAuthenticated();
+
+      expect(loginSpy).toHaveBeenCalledTimes(1);
+      expect(logoutSpy).toHaveBeenCalledTimes(1);
+      expect(isAuthSpy).toHaveBeenCalledTimes(1);
+
+      loginSpy.mockRestore();
+      logoutSpy.mockRestore();
+      isAuthSpy.mockRestore();
+    });
+  });
+
   describe('Authentication Flow', () => {
     it('should complete full login flow', async () => {
       // Mock successful login
@@ -64,7 +96,7 @@ describe('UniFiClient Integration Tests', () => {
       expect(client.isAuthenticated()).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
         method: 'POST',
-        url: '/api/login',
+        url: '/api/auth/login',
         data: {
           username: 'admin',
           password: 'password',
@@ -142,13 +174,21 @@ describe('UniFiClient Integration Tests', () => {
         }
       });
 
-      const devices = await client.listDevices();
+      const devices = await client.list_devices();
       
       expect(devices).toEqual(mockDevices);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
         method: 'GET',
         url: '/api/s/default/stat/device'
       });
+    });
+
+    it('should provide access to device management API', async () => {
+      const deviceAPI = client.getDeviceManagementAPI();
+      expect(deviceAPI).toBeDefined();
+      expect(typeof deviceAPI.list_devices).toBe('function');
+      expect(typeof deviceAPI.adopt_device).toBe('function');
+      expect(typeof deviceAPI.restart_device).toBe('function');
     });
 
     it('should adopt device successfully', async () => {
@@ -159,7 +199,7 @@ describe('UniFiClient Integration Tests', () => {
         }
       });
 
-      const result = await client.adoptDevice('00:11:22:33:44:55');
+      const result = await client.adopt_device('00:11:22:33:44:55');
       
       expect(result).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -180,7 +220,7 @@ describe('UniFiClient Integration Tests', () => {
         }
       });
 
-      const result = await client.restartDevice('00:11:22:33:44:55');
+      const result = await client.restart_device('00:11:22:33:44:55');
       
       expect(result).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -227,13 +267,21 @@ describe('UniFiClient Integration Tests', () => {
         }
       });
 
-      const users = await client.listUsers();
+      const users = await client.list_users();
       
       expect(users).toEqual(mockUsers);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
         method: 'GET',
-        url: '/api/s/default/stat/user'
+        url: '/api/s/default/list/user'
       });
+    });
+
+    it('should provide access to client management API', async () => {
+      const clientAPI = client.getClientManagementAPI();
+      expect(clientAPI).toBeDefined();
+      expect(typeof clientAPI.list_users).toBe('function');
+      expect(typeof clientAPI.block_sta).toBe('function');
+      expect(typeof clientAPI.authorize_guest).toBe('function');
     });
 
     it('should block client successfully', async () => {
@@ -244,7 +292,7 @@ describe('UniFiClient Integration Tests', () => {
         }
       });
 
-      const result = await client.blockSta('aa:bb:cc:dd:ee:ff');
+      const result = await client.block_sta('aa:bb:cc:dd:ee:ff');
       
       expect(result).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -265,7 +313,7 @@ describe('UniFiClient Integration Tests', () => {
         }
       });
 
-      const result = await client.authorizeGuest('aa:bb:cc:dd:ee:ff', 60);
+      const result = await client.authorize_guest('aa:bb:cc:dd:ee:ff', 60);
       
       expect(result).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -312,12 +360,12 @@ describe('UniFiClient Integration Tests', () => {
         }
       });
 
-      const wlans = await client.listWlanconf();
+      const wlans = await client.list_wlanconf();
       
       expect(wlans).toEqual(mockWlans);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
         method: 'GET',
-        url: '/api/s/default/rest/wlanconf'
+        url: '/api/s/default/list/wlanconf'
       });
     });
 
@@ -329,8 +377,8 @@ describe('UniFiClient Integration Tests', () => {
         }
       });
 
-      // Use actual API signature for createWlan
-      const result = await client.createWlan(
+      // Use actual API signature for create_wlan
+      const result = await client.create_wlan(
         'NewNetwork',
         'newpassword',
         'default-usergroup',
@@ -341,19 +389,21 @@ describe('UniFiClient Integration Tests', () => {
       expect(result).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
         method: 'POST',
-        url: '/api/s/default/rest/wlanconf',
-        data: {
+        url: '/api/s/default/add/wlanconf',
+        data: expect.objectContaining({
           name: 'NewNetwork',
-          x_passphrase: 'newpassword',
           usergroup_id: 'default-usergroup',
           wlangroup_id: 'default-wlangroup',
           enabled: true,
           hide_ssid: false,
           is_guest: false,
-          security: 'wpapsk',
+          security: 'open', // Default security is 'open'
           wpa_mode: 'wpa2',
-          wpa_enc: 'ccmp'
-        }
+          wpa_enc: 'ccmp',
+          uapsd_enabled: false,
+          schedule_enabled: false,
+          schedule: []
+        })
       });
     });
   });
@@ -374,14 +424,14 @@ describe('UniFiClient Integration Tests', () => {
       const apiError = new APIError('Bad Request', 400, { error: 'Invalid parameter' });
       mockAxiosInstance.request.mockRejectedValue(apiError);
 
-      await expect(client.listDevices()).rejects.toThrow(APIError);
+      await expect(client.list_devices()).rejects.toThrow(APIError);
     });
 
     it('should handle network errors', async () => {
       const networkError = new NetworkError('Connection failed');
       mockAxiosInstance.request.mockRejectedValue(networkError);
 
-      await expect(client.listDevices()).rejects.toThrow(NetworkError);
+      await expect(client.list_devices()).rejects.toThrow(NetworkError);
     });
 
     it.skip('should re-authenticate on session expiry', async () => {
@@ -402,7 +452,7 @@ describe('UniFiClient Integration Tests', () => {
           }
         });
 
-      const result = await client.listDevices();
+      const result = await client.list_devices();
       
       expect(result).toEqual([]);
       // Should have made 3 calls: failed API call, re-login, successful API call
@@ -437,7 +487,7 @@ describe('UniFiClient Integration Tests', () => {
       // Cancel the request
       abortController.abort();
 
-      await expect(client.listDevices(undefined, { signal: abortController.signal }))
+      await expect(client.list_devices(undefined, { signal: abortController.signal }))
         .rejects.toThrow('Request was cancelled');
     });
   });

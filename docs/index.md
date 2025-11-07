@@ -25,7 +25,7 @@ const client = new UniFiClient({
 
 // Authenticate and list devices
 await client.login();
-const devices = await client.listDevices();
+const devices = await client.list_devices();
 console.log(`Found ${devices.length} devices`);
 ```
 

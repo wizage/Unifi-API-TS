@@ -8,6 +8,7 @@
 export { UniFiClient } from './client/UniFiClient';
 export * from './types';
 export * from './errors';
+export * from './api';
 
 // Export specific HTTP classes to avoid conflicts
 export { HTTPClient, SessionManager } from './http';

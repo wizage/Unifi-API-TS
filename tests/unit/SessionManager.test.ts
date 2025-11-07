@@ -79,7 +79,7 @@ describe('SessionManager', () => {
       await sessionManager.login();
 
       expect(mockHttpClient.clearCookies).toHaveBeenCalled();
-      expect(mockHttpClient.post).toHaveBeenCalledWith('/api/login', {
+      expect(mockHttpClient.post).toHaveBeenCalledWith('/api/auth/login', {
         username: config.username,
         password: config.password,
         remember: false,
@@ -179,7 +179,7 @@ describe('SessionManager', () => {
 
       await sessionManager.ensureAuthenticated();
 
-      expect(mockHttpClient.post).toHaveBeenCalledWith('/api/login', expect.any(Object));
+      expect(mockHttpClient.post).toHaveBeenCalledWith('/api/auth/login', expect.any(Object));
       expect(sessionManager.isAuthenticated()).toBe(true);
     });
 

@@ -27,26 +27,26 @@ async function guestManagementExample() {
 
     // 1. Basic guest authorization (60 minutes)
     console.log('\n🎫 Authorizing guest for basic access...');
-    await client.authorizeGuest(guestMac, 60);
+    await client.authorize_guest(guestMac, 60);
     console.log(`✅ Guest ${guestMac} authorized for 60 minutes`);
 
     // 2. Guest authorization with bandwidth limits
     console.log('\n🚀 Authorizing guest with bandwidth limits...');
     const upBandwidth = 5000;   // 5 Mbps upload
     const downBandwidth = 10000; // 10 Mbps download
-    await client.authorizeGuest(guestMac, 120, upBandwidth, downBandwidth);
+    await client.authorize_guest(guestMac, 120, upBandwidth, downBandwidth);
     console.log(`✅ Guest authorized for 120 minutes with ${upBandwidth/1000}/${downBandwidth/1000} Mbps limits`);
 
     // 3. Guest authorization with data limit
     console.log('\n💾 Authorizing guest with data limit...');
     const dataLimitMB = 1024; // 1 GB
-    await client.authorizeGuest(guestMac, 180, undefined, undefined, dataLimitMB);
+    await client.authorize_guest(guestMac, 180, undefined, undefined, dataLimitMB);
     console.log(`✅ Guest authorized for 180 minutes with ${dataLimitMB} MB data limit`);
 
     // 4. Guest authorization with all options
     console.log('\n🎯 Authorizing guest with all options...');
     const apMac = '11:22:33:44:55:66'; // Specific AP MAC
-    await client.authorizeGuest(
+    await client.authorize_guest(
       guestMac,
       240,           // 4 hours
       2000,          // 2 Mbps up
@@ -58,7 +58,7 @@ async function guestManagementExample() {
 
     // 5. Check current connected clients to see our guest
     console.log('\n👥 Checking connected clients...');
-    const clients = await client.listUsers();
+    const clients = await client.list_users();
     const guestClient = clients.find(c => c.mac.toLowerCase() === guestMac.toLowerCase());
     
     if (guestClient) {
@@ -75,31 +75,31 @@ async function guestManagementExample() {
     console.log('\n🔧 Demonstrating client management...');
     
     // Force reconnection (useful for applying new settings)
-    await client.reconnectSta(guestMac);
+    await client.reconnect_sta(guestMac);
     console.log(`🔄 Forced reconnection for ${guestMac}`);
 
     // Wait a moment for reconnection
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Block the client
-    await client.blockSta(guestMac);
+    await client.block_sta(guestMac);
     console.log(`🚫 Blocked client ${guestMac}`);
 
     // Wait a moment
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Unblock the client
-    await client.unblockSta(guestMac);
+    await client.unblock_sta(guestMac);
     console.log(`✅ Unblocked client ${guestMac}`);
 
     // 7. Revoke guest authorization
     console.log('\n🚪 Revoking guest authorization...');
-    await client.unauthorizeGuest(guestMac);
+    await client.unauthorize_guest(guestMac);
     console.log(`❌ Guest authorization revoked for ${guestMac}`);
 
     // 8. Forget the client (remove from controller memory)
     console.log('\n🗑️  Forgetting client...');
-    await client.forgetSta(guestMac);
+    await client.forget_sta(guestMac);
     console.log(`🧹 Client ${guestMac} forgotten (removed from controller memory)`);
 
   } catch (error) {
@@ -127,7 +127,7 @@ async function safeGuestAuthorization(client: UniFiClient, mac: string, minutes:
     throw new Error(`Invalid MAC address format: ${mac}`);
   }
   
-  return await client.authorizeGuest(mac, minutes);
+  return await client.authorize_guest(mac, minutes);
 }
 
 // Run the example

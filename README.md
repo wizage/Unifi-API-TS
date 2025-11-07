@@ -56,11 +56,11 @@ async function main() {
     await client.login();
     
     // Get all devices
-    const devices = await client.listDevices();
+    const devices = await client.list_devices();
     console.log(`Found ${devices.length} devices`);
     
     // Get all connected clients
-    const clients = await client.listUsers();
+    const clients = await client.list_users();
     console.log(`Found ${clients.length} connected clients`);
     
     // Logout when done
@@ -126,51 +126,51 @@ await client.logout();
 
 ```typescript
 // List all UniFi devices (APs, switches, gateways)
-const devices = await client.listDevices();
+const devices = await client.list_devices();
 
 // Get specific device by MAC address
-const device = await client.listDevices('aa:bb:cc:dd:ee:ff');
+const device = await client.list_devices('aa:bb:cc:dd:ee:ff');
 
 // Get basic device information (faster)
-const basicDevices = await client.listDevicesBasic();
+const basicDevices = await client.list_devices_basic();
 ```
 
 ### Client Management
 
 ```typescript
 // List all connected clients
-const clients = await client.listUsers();
+const clients = await client.list_users();
 
 // Get specific client by MAC address
-const client = await client.listUsers('aa:bb:cc:dd:ee:ff');
+const client = await client.list_users('aa:bb:cc:dd:ee:ff');
 
 // Force client reconnection
-await client.reconnectSta('aa:bb:cc:dd:ee:ff');
+await client.reconnect_sta('aa:bb:cc:dd:ee:ff');
 
 // Block a client
-await client.blockSta('aa:bb:cc:dd:ee:ff');
+await client.block_sta('aa:bb:cc:dd:ee:ff');
 
 // Unblock a client
-await client.unblockSta('aa:bb:cc:dd:ee:ff');
+await client.unblock_sta('aa:bb:cc:dd:ee:ff');
 
 // Forget a client (remove from controller memory)
-await client.forgetSta('aa:bb:cc:dd:ee:ff');
+await client.forget_sta('aa:bb:cc:dd:ee:ff');
 ```
 
 ### Guest Management
 
 ```typescript
 // Authorize guest for 60 minutes
-await client.authorizeGuest('aa:bb:cc:dd:ee:ff', 60);
+await client.authorize_guest('aa:bb:cc:dd:ee:ff', 60);
 
 // Authorize guest with bandwidth limits (5 Mbps up, 10 Mbps down)
-await client.authorizeGuest('aa:bb:cc:dd:ee:ff', 60, 5000, 10000);
+await client.authorize_guest('aa:bb:cc:dd:ee:ff', 60, 5000, 10000);
 
 // Authorize guest with data limit (1 GB)
-await client.authorizeGuest('aa:bb:cc:dd:ee:ff', 60, undefined, undefined, 1024);
+await client.authorize_guest('aa:bb:cc:dd:ee:ff', 60, undefined, undefined, 1024);
 
 // Revoke guest authorization
-await client.unauthorizeGuest('aa:bb:cc:dd:ee:ff');
+await client.unauthorize_guest('aa:bb:cc:dd:ee:ff');
 ```
 
 ## Error Handling
@@ -214,7 +214,7 @@ const controller = new AbortController();
 setTimeout(() => controller.abort(), 5000);
 
 try {
-  const devices = await client.listDevices(undefined, {
+  const devices = await client.list_devices(undefined, {
     signal: controller.signal
   });
 } catch (error) {
@@ -275,8 +275,8 @@ This library is written in TypeScript and provides comprehensive type definition
 import { UniFiDevice, UniFiClient, DeviceConfig } from 'unifi-api-ts';
 
 // All API responses are fully typed
-const devices: UniFiDevice[] = await client.listDevices();
-const clients: UniFiClient[] = await client.listUsers();
+const devices: UniFiDevice[] = await client.list_devices();
+const clients: UniFiClient[] = await client.list_users();
 
 // Configuration objects are also typed
 const deviceConfig: DeviceConfig = {

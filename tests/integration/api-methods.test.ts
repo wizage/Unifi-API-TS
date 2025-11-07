@@ -74,7 +74,7 @@ describe('API Methods Integration Tests', () => {
         }
       });
 
-      const sites = await client.listSites();
+      const sites = await client.list_sites();
       
       expect(sites).toEqual(mockSites);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -91,7 +91,7 @@ describe('API Methods Integration Tests', () => {
         }
       });
 
-      const result = await client.createSite('New Site Description');
+      const result = await client.create_site('New Site Description');
       
       expect(result).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -125,7 +125,7 @@ describe('API Methods Integration Tests', () => {
         }
       });
 
-      const networks = await client.listNetworkconf();
+      const networks = await client.list_networkconf();
       
       expect(networks).toEqual(mockNetworks);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -148,7 +148,7 @@ describe('API Methods Integration Tests', () => {
         ip_subnet: '192.168.100.1/24'
       };
 
-      const result = await client.createNetwork(networkConfig);
+      const result = await client.create_network(networkConfig);
       
       expect(result).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -171,14 +171,14 @@ describe('API Methods Integration Tests', () => {
 
       mockAxiosInstance.request.mockResolvedValue({
         data: {
-          data: mockSysInfo,
+          data: [mockSysInfo],
           meta: { rc: 'ok' }
         }
       });
 
-      const sysInfo = await client.statSysinfo();
+      const sysInfo = await client.stat_sysinfo();
       
-      expect(sysInfo).toEqual(mockSysInfo);
+      expect(sysInfo).toEqual([mockSysInfo]);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
         method: 'GET',
         url: '/api/s/default/stat/sysinfo'
@@ -205,14 +205,19 @@ describe('API Methods Integration Tests', () => {
         }
       });
 
-      const events = await client.listEvents();
+      const events = await client.list_events();
       
       expect(events).toEqual(mockEvents);
-      expect(mockAxiosInstance.request).toHaveBeenCalledWith({
-        method: 'GET',
-        url: '/api/s/default/stat/event',
-        params: {}
-      });
+      expect(mockAxiosInstance.request).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method: 'POST',
+          url: '/api/s/default/stat/event',
+          data: expect.objectContaining({
+            within: 720,
+            _limit: 3000
+          })
+        })
+      );
     });
 
     it('should list alarms successfully', async () => {
@@ -234,13 +239,12 @@ describe('API Methods Integration Tests', () => {
         }
       });
 
-      const alarms = await client.listAlarms();
+      const alarms = await client.list_alarms();
       
       expect(alarms).toEqual(mockAlarms);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
         method: 'GET',
-        url: '/api/s/default/list/alarm',
-        params: {}
+        url: '/api/s/default/list/alarm'
       });
     });
   });
@@ -254,7 +258,7 @@ describe('API Methods Integration Tests', () => {
         }
       });
 
-      const result = await client.reconnectSta('aa:bb:cc:dd:ee:ff');
+      const result = await client.reconnect_sta('aa:bb:cc:dd:ee:ff');
       
       expect(result).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -275,7 +279,7 @@ describe('API Methods Integration Tests', () => {
         }
       });
 
-      const result = await client.unauthorizeGuest('aa:bb:cc:dd:ee:ff');
+      const result = await client.unauthorize_guest('aa:bb:cc:dd:ee:ff');
       
       expect(result).toBe(true);
       expect(mockAxiosInstance.request).toHaveBeenCalledWith({
@@ -315,7 +319,7 @@ describe('API Methods Integration Tests', () => {
         }
       });
 
-      const devices = await client.listDevices();
+      const devices = await client.list_devices();
       expect(devices).toEqual([]);
     });
 
@@ -333,7 +337,7 @@ describe('API Methods Integration Tests', () => {
         }
       });
 
-      const devices = await client.listDevices('00:11:22:33:44:55');
+      const devices = await client.list_devices('00:11:22:33:44:55');
       expect(devices[0]).toEqual(mockDevice);
     });
 
@@ -345,7 +349,7 @@ describe('API Methods Integration Tests', () => {
         }
       });
 
-      await expect(client.listDevices('00:11:22:33:44:55'))
+      await expect(client.list_devices('00:11:22:33:44:55'))
         .rejects.toThrow('Device not found');
     });
   });

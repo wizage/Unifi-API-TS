@@ -28,49 +28,49 @@ client.isAuthenticated();                // Check auth status
 ### Device Management
 ```typescript
 // List devices
-const devices = await client.listDevices();
-const basicDevices = await client.listDevicesBasic();
+const devices = await client.list_devices();
+const basicDevices = await client.list_devices_basic();
 
 // Adopt & manage devices
-await client.adoptDevice(['aa:bb:cc:dd:ee:ff']);
-await client.restartDevice(['aa:bb:cc:dd:ee:ff']);
-await client.forceProvision(['aa:bb:cc:dd:ee:ff']);
+await client.adopt_device(['aa:bb:cc:dd:ee:ff']);
+await client.restart_device(['aa:bb:cc:dd:ee:ff']);
+await client.force_provision(['aa:bb:cc:dd:ee:ff']);
 
 // Advanced device operations
-await client.disableAp('device_id', true);
-await client.ledOverride('device_id', 'on');
-await client.locateAp('aa:bb:cc:dd:ee:ff', true);
-await client.renameAp('device_id', 'New AP Name');
+await client.disable_ap('device_id', true);
+await client.led_override('device_id', 'on');
+await client.locate_ap('aa:bb:cc:dd:ee:ff', true);
+await client.rename_ap('device_id', 'New AP Name');
 ```
 
 ### Client Management
 ```typescript
 // List clients
-const clients = await client.listUsers();
-const activeClients = await client.listActiveClients();
-const clientHistory = await client.listClientsHistory();
+const clients = await client.list_users();
+const activeClients = await client.list_active_clients();
+const clientHistory = await client.list_clients_history();
 
 // Client operations
-await client.authorizeGuest('aa:bb:cc:dd:ee:ff', 60); // 60 minutes
-await client.unauthorizeGuest('aa:bb:cc:dd:ee:ff');
-await client.blockSta('aa:bb:cc:dd:ee:ff');
-await client.unblockSta('aa:bb:cc:dd:ee:ff');
-await client.reconnectSta('aa:bb:cc:dd:ee:ff');
-await client.forgetSta('aa:bb:cc:dd:ee:ff');
+await client.authorize_guest('aa:bb:cc:dd:ee:ff', 60); // 60 minutes
+await client.unauthorize_guest('aa:bb:cc:dd:ee:ff');
+await client.block_sta('aa:bb:cc:dd:ee:ff');
+await client.unblock_sta('aa:bb:cc:dd:ee:ff');
+await client.reconnect_sta('aa:bb:cc:dd:ee:ff');
+await client.forget_sta('aa:bb:cc:dd:ee:ff');
 
 // Client details & management
-await client.setStaNote('user_id', 'Important client');
-await client.setStaName('user_id', 'John Doe Device');
-const clientStats = await client.statClient('aa:bb:cc:dd:ee:ff');
+await client.set_sta_note('user_id', 'Important client');
+await client.set_sta_name('user_id', 'John Doe Device');
+const clientStats = await client.stat_client('aa:bb:cc:dd:ee:ff');
 ```
 
 ### WLAN Management
 ```typescript
 // List WLANs
-const wlans = await client.listWlanconf();
+const wlans = await client.list_wlanconf();
 
 // Create WLAN
-await client.createWlan(
+await client.create_wlan(
   'Guest Network',           // name
   'password123',            // passphrase
   'usergroup_id',          // user group
@@ -78,18 +78,18 @@ await client.createWlan(
 );
 
 // Manage WLANs
-await client.setWlansettings('wlan_id', 'newpassword');
-await client.disableWlan('wlan_id', true);
-await client.deleteWlan('wlan_id');
+await client.set_wlansettings('wlan_id', 'newpassword');
+await client.disable_wlan('wlan_id', true);
+await client.delete_wlan('wlan_id');
 ```
 
 ### Network Management
 ```typescript
 // List networks
-const networks = await client.listNetworkconf();
+const networks = await client.list_networkconf();
 
 // Create network
-await client.createNetwork({
+await client.create_network({
   name: 'IoT Network',
   purpose: 'vlan-only',
   vlan_enabled: true,
@@ -98,88 +98,88 @@ await client.createNetwork({
 });
 
 // Update network
-await client.setNetworksettingsBase('network_id', {
+await client.set_networksettings_base('network_id', {
   dhcp_enabled: true,
   dhcp_start: '192.168.100.10',
   dhcp_stop: '192.168.100.200'
 });
 
-await client.deleteNetwork('network_id');
+await client.delete_network('network_id');
 ```
 
 ### Site Management
 ```typescript
 // List sites
-const sites = await client.listSites();
-const siteStats = await client.statSites();
+const sites = await client.list_sites();
+const siteStats = await client.stat_sites();
 
 // Create & manage sites
-await client.createSite('New Site Description');
-await client.setSiteName('Updated Site Name');
-await client.setSiteCountry(840); // US country code
-await client.deleteSite('site_id');
+await client.create_site('New Site Description');
+await client.set_site_name('Updated Site Name');
+await client.set_site_country(840); // US country code
+await client.delete_site('site_id');
 
 // Site settings
-await client.setSiteLocale('America/New_York');
-await client.setSiteSnmp('public', 'admin@example.com', 'Data Center');
-await client.siteLeds(false); // Turn off all AP LEDs
+await client.set_site_locale('America/New_York');
+await client.set_site_snmp('public', 'admin@example.com', 'Data Center');
+await client.site_leds(false); // Turn off all AP LEDs
 ```
 
 ### Statistics & Monitoring
 ```typescript
 // System information
-const sysInfo = await client.statSysinfo();
-const status = await client.statStatus();
-const health = await client.statHealth();
+const sysInfo = await client.stat_sysinfo();
+const status = await client.stat_status();
+const health = await client.stat_health();
 
 // Time-series statistics (5min, hourly, daily, monthly)
-const siteStats = await client.stat5minutesSite();
-const apStats = await client.statHourlyAps();
-const userStats = await client.statDailyUser('aa:bb:cc:dd:ee:ff');
-const gwStats = await client.statMonthlyGateway();
+const siteStats = await client.stat_5minutes_site();
+const apStats = await client.stat_hourly_aps();
+const userStats = await client.stat_daily_user('aa:bb:cc:dd:ee:ff');
+const gwStats = await client.stat_monthly_gateway();
 
 // Events & alarms
-const events = await client.listEvents();
-const alarms = await client.listAlarms();
-await client.archiveAlarm('alarm_id');
+const events = await client.list_events();
+const alarms = await client.list_alarms();
+await client.archive_alarm('alarm_id');
 
 // Advanced statistics
-const dpiStats = await client.statDpi();
-const speedtest = await client.statSpeedtest();
-const dashboard = await client.statDashboard();
+const dpiStats = await client.stat_dpi();
+const speedtest = await client.stat_speedtest();
+const dashboard = await client.stat_dashboard();
 ```
 
 ### User Groups
 ```typescript
 // List user groups
-const groups = await client.listUsergroups();
+const groups = await client.list_usergroups();
 
 // Create user group
-await client.createUsergroup('VIP Users', 50000, 10000); // 50Mbps down, 10Mbps up
+await client.create_usergroup('VIP Users', 50000, 10000); // 50Mbps down, 10Mbps up
 
 // Assign client to group
-await client.setUsergroup('client_id', 'group_id');
+await client.set_usergroup('client_id', 'group_id');
 
 // Manage groups
-await client.editUsergroup('group_id', 'site_id', 'Updated Name', 100000, 20000);
-await client.deleteUsergroup('group_id');
+await client.edit_usergroup('group_id', 'site_id', 'Updated Name', 100000, 20000);
+await client.delete_usergroup('group_id');
 ```
 
 ### Firewall Management
 ```typescript
 // List firewall groups & rules
-const fwGroups = await client.listFirewallgroups();
-const fwRules = await client.listFirewallrules();
+const fwGroups = await client.list_firewallgroups();
+const fwRules = await client.list_firewallrules();
 
 // Create firewall group
-await client.createFirewallgroup(
+await client.create_firewallgroup(
   'Internal Servers',
   'address-group',
   ['192.168.1.10', '192.168.1.11', '192.168.1.12']
 );
 
 // Update firewall group
-await client.editFirewallgroup(
+await client.edit_firewallgroup(
   'group_id',
   'site_id', 
   'Updated Servers',
@@ -187,26 +187,26 @@ await client.editFirewallgroup(
   ['192.168.1.10', '192.168.1.20']
 );
 
-await client.deleteFirewallgroup('group_id');
+await client.delete_firewallgroup('group_id');
 ```
 
 ### Device Tags
 ```typescript
 // List tags
-const tags = await client.listTags();
+const tags = await client.list_tags();
 
 // Create tag
-await client.createTag('Critical Infrastructure', ['aa:bb:cc:dd:ee:ff']);
+await client.create_tag('Critical Infrastructure', ['aa:bb:cc:dd:ee:ff']);
 
 // Manage tagged devices
-await client.setTaggedDevices(['aa:bb:cc:dd:ee:ff', 'ff:ee:dd:cc:bb:aa'], 'tag_id');
-await client.deleteTag('tag_id');
+await client.set_tagged_devices(['aa:bb:cc:dd:ee:ff', 'ff:ee:dd:cc:bb:aa'], 'tag_id');
+await client.delete_tag('tag_id');
 ```
 
 ### Voucher Management
 ```typescript
 // Create vouchers
-const voucher = await client.createVoucher(
+const voucher = await client.create_voucher(
   480,        // 8 hours
   5,          // 5 vouchers
   1,          // single use
@@ -216,21 +216,21 @@ const voucher = await client.createVoucher(
 );
 
 // Revoke voucher
-await client.revokeVoucher('voucher_id');
+await client.revoke_voucher('voucher_id');
 
 // List vouchers
-const vouchers = await client.statVoucher();
+const vouchers = await client.stat_voucher();
 ```
 
 ### Firmware & Updates
 ```typescript
 // Check for updates
-const controllerUpdate = await client.checkControllerUpdate();
-const firmwareUpdate = await client.checkFirmwareUpdate();
+const controllerUpdate = await client.check_controller_update();
+const firmwareUpdate = await client.check_firmware_update();
 
 // Upgrade devices
-await client.upgradeDevice('aa:bb:cc:dd:ee:ff');
-await client.upgradeDeviceExternal('firmware_url', ['aa:bb:cc:dd:ee:ff']);
+await client.upgrade_device('aa:bb:cc:dd:ee:ff');
+await client.upgrade_device_external('firmware_url', ['aa:bb:cc:dd:ee:ff']);
 ```
 
 ## Error Handling
@@ -289,11 +289,11 @@ const client = new UniFiClient({
 ```typescript
 // Restart multiple devices
 const deviceMacs = ['aa:bb:cc:dd:ee:ff', 'ff:ee:dd:cc:bb:aa'];
-await client.restartDevice(deviceMacs);
+await client.restart_device(deviceMacs);
 
 // Block multiple clients
 for (const mac of clientMacs) {
-  await client.blockSta(mac);
+  await client.block_sta(mac);
 }
 ```
 
@@ -302,8 +302,8 @@ for (const mac of clientMacs) {
 async function monitorSite() {
   while (true) {
     try {
-      const health = await client.statHealth();
-      const alarms = await client.listAlarms();
+      const health = await client.stat_health();
+      const alarms = await client.list_alarms();
       
       console.log(`Health: ${health.length} metrics`);
       console.log(`Alarms: ${alarms.length} active`);
@@ -321,11 +321,11 @@ async function monitorSite() {
 ```typescript
 async function getSiteDashboard() {
   const [sysInfo, health, devices, clients, alarms] = await Promise.all([
-    client.statSysinfo(),
-    client.statHealth(),
-    client.listDevicesBasic(),
-    client.listActiveClients(),
-    client.listAlarms()
+    client.stat_sysinfo(),
+    client.stat_health(),
+    client.list_devices_basic(),
+    client.list_active_clients(),
+    client.list_alarms()
   ]);
   
   return {
@@ -345,6 +345,25 @@ All methods return properly typed responses. Import types as needed:
 ```typescript
 import { UniFiDevice, UniFiClient, UniFiSite, UniFiNetwork } from './src/types';
 
-const devices: UniFiDevice[] = await client.listDevices();
-const sites: UniFiSite[] = await client.listSites();
+const devices: UniFiDevice[] = await client.list_devices();
+const sites: UniFiSite[] = await client.list_sites();
+```
+
+## Deprecated Methods
+
+⚠️ **Note**: Some methods are deprecated. Use the recommended alternatives:
+
+```typescript
+// ❌ Deprecated
+await client.list_aps();
+await client.restart_ap();
+await client.site_ledson();
+await client.site_ledsoff();
+
+// ✅ Recommended
+const devices = await client.list_devices();
+const aps = devices.filter(d => d.type === 'uap');
+await client.restart_device('aa:bb:cc:dd:ee:ff');
+await client.site_leds(true);
+await client.site_leds(false);
 ```

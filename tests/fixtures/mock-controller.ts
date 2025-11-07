@@ -56,7 +56,7 @@ export class MockUniFiController {
 
   private async routeRequest(method: string, url: string, data?: any, headers?: any): Promise<any> {
     // Authentication endpoints
-    if (url === '/api/login' && method === 'POST') {
+    if ((url === '/api/login' || url === '/api/auth/login' || url === '/api/auth') && method === 'POST') {
       return this.handleLogin(data);
     }
 
@@ -65,7 +65,7 @@ export class MockUniFiController {
     }
 
     // Check authentication for protected endpoints
-    if (!this.isAuthenticated && !url.startsWith('/api/login')) {
+    if (!this.isAuthenticated && !url.startsWith('/api/login') && !url.startsWith('/api/auth')) {
       throw new Error('Authentication required');
     }
 
@@ -83,8 +83,8 @@ export class MockUniFiController {
       return this.handleDeviceCommand(data);
     }
 
-    // Client endpoints - handle both /stat/sta and /stat/user
-    if ((url.includes('/stat/sta') || url.includes('/stat/user')) && method === 'GET') {
+    // Client endpoints - handle both /stat/sta, /stat/user, and /list/user
+    if ((url.includes('/stat/sta') || url.includes('/stat/user') || url.includes('/list/user')) && method === 'GET') {
       return createMockResponse(MockResponses.clients);
     }
 
@@ -93,11 +93,11 @@ export class MockUniFiController {
     }
 
     // WLAN endpoints
-    if (url.includes('/rest/wlanconf') && method === 'GET') {
+    if ((url.includes('/rest/wlanconf') || url.includes('/list/wlanconf')) && method === 'GET') {
       return createMockResponse(MockResponses.wlans);
     }
 
-    if (url.includes('/rest/wlanconf') && method === 'POST') {
+    if ((url.includes('/rest/wlanconf') || url.includes('/add/wlanconf')) && method === 'POST') {
       return this.handleCreateWlan(data);
     }
 
@@ -113,13 +113,13 @@ export class MockUniFiController {
     // System info
     if (url.includes('/stat/sysinfo') && method === 'GET') {
       return {
-        data: MockResponses.sysinfo,
+        data: [MockResponses.sysinfo], // Wrap in array as expected by the API
         meta: { rc: 'ok' }
       };
     }
 
-    // Events
-    if (url.includes('/stat/event') && method === 'GET') {
+    // Events - handle both GET and POST
+    if (url.includes('/stat/event') && (method === 'GET' || method === 'POST')) {
       return createMockResponse(MockResponses.events);
     }
 
@@ -203,8 +203,12 @@ export class MockUniFiController {
   }
 
   private handleCreateWlan(data: any): any {
-    if (!data.name || !data.x_passphrase) {
-      return createMockErrorResponse('Name and passphrase are required');
+    if (!data.name) {
+      return createMockErrorResponse('Name is required');
+    }
+    // Only require passphrase for secured networks
+    if (data.security && data.security !== 'open' && !data.x_passphrase) {
+      return createMockErrorResponse('Passphrase is required for secured networks');
     }
     return MockResponses.success;
   }

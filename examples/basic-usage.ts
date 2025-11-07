@@ -32,7 +32,7 @@ async function basicUsageExample() {
 
     // List all UniFi devices
     console.log('\n📡 Fetching UniFi devices...');
-    const devices = await client.listDevices();
+    const devices = await client.list_devices();
     console.log(`Found ${devices.length} UniFi devices:`);
     
     devices.forEach((device, index) => {
@@ -43,7 +43,7 @@ async function basicUsageExample() {
 
     // List connected clients
     console.log('\n👥 Fetching connected clients...');
-    const clients = await client.listUsers();
+    const clients = await client.list_users();
     console.log(`Found ${clients.length} connected clients:`);
     
     clients.forEach((client, index) => {
@@ -55,7 +55,7 @@ async function basicUsageExample() {
 
     // Get basic device information (faster for large networks)
     console.log('\n⚡ Fetching basic device info...');
-    const basicDevices = await client.listDevicesBasic();
+    const basicDevices = await client.list_devices_basic();
     console.log(`Basic info for ${basicDevices.length} devices retrieved`);
 
   } catch (error) {

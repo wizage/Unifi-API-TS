@@ -49,4 +49,4 @@ export type {
   UniFiSetting,
   AdvancedAdoptConfig,
   DeviceMigrationConfig
-} from '../generated/types';
+} from './generated';

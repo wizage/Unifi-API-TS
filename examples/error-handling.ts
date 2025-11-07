@@ -95,7 +95,7 @@ async function errorHandlingExample() {
     }, 100);
 
     // This request will be cancelled
-    await client.listDevices(undefined, { signal: controller.signal });
+    await client.list_devices(undefined, { signal: controller.signal });
   } catch (error) {
     if (error.message.includes('cancelled') || error.message.includes('aborted')) {
       console.log('✅ Request successfully cancelled');
@@ -172,7 +172,7 @@ async function gracefulDegradationExample() {
   // Try to get devices, fall back to empty array if it fails
   try {
     await client.login();
-    devices = await client.listDevices();
+    devices = await client.list_devices();
     console.log(`✅ Successfully retrieved ${devices.length} devices`);
   } catch (error) {
     console.log('⚠️  Failed to get devices, continuing with empty list');
@@ -181,7 +181,7 @@ async function gracefulDegradationExample() {
 
   // Try to get clients, fall back to empty array if it fails
   try {
-    clients = await client.listUsers();
+    clients = await client.list_users();
     console.log(`✅ Successfully retrieved ${clients.length} clients`);
   } catch (error) {
     console.log('⚠️  Failed to get clients, continuing with empty list');
@@ -211,7 +211,7 @@ async function comprehensiveErrorHandlerExample() {
 
   try {
     await client.login();
-    const devices = await client.listDevices();
+    const devices = await client.list_devices();
     console.log(`✅ Retrieved ${devices.length} devices successfully`);
   } catch (error) {
     handleUniFiError(error);

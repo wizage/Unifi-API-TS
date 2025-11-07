@@ -28,13 +28,31 @@ import {
   ConfigurationError 
 } from '../errors';
 
-export interface LoginResponse {
+// UniFi Network Controller login response format
+export interface NetworkControllerLoginResponse {
   data: any[];
   meta: {
     msg: string;
     rc: string;
   };
 }
+
+// UniFi OS login response format
+export interface UniFiOSLoginResponse {
+  unique_id: string;
+  username: string;
+  first_name?: string;
+  last_name?: string;
+  full_name?: string;
+  email?: string;
+  roles?: any[];
+  permissions?: any;
+  deviceToken?: string;
+  [key: string]: any; // Allow additional properties
+}
+
+// Union type for both response formats
+export type LoginResponse = NetworkControllerLoginResponse | UniFiOSLoginResponse;
 
 export interface SessionInfo {
   isAuthenticated: boolean;
@@ -131,25 +149,74 @@ export class SessionManager {
         strict: true
       };
 
-      const response = await this.httpClient.post<LoginResponse>('/api/login', loginData);
+      // Try different login endpoints as UniFi controllers use different endpoints across versions
+      const loginEndpoints = ['/api/auth/login', '/api/login', '/api/auth'];
+      let lastError: Error | undefined;
 
-      // Check if login was successful
-      if (response.meta?.rc !== 'ok') {
-        throw new AuthenticationError(
-          response.meta?.msg || 'Login failed',
-          response
-        );
+      for (const endpoint of loginEndpoints) {
+        try {
+          const response = await this.httpClient.post<LoginResponse>(endpoint, loginData);
+
+          // Check if login was successful
+          // Handle both UniFi Network Controller format (with meta.rc) and UniFi OS format (direct user data)
+          const responseData = response as any;
+          const isNetworkControllerFormat = responseData.meta !== undefined;
+          const isUniFiOSFormat = responseData.unique_id !== undefined || responseData.username !== undefined;
+          
+          if (isNetworkControllerFormat) {
+            // UniFi Network Controller format
+            if (responseData.meta?.rc !== 'ok') {
+              throw new AuthenticationError(
+                responseData.meta?.msg || 'Login failed',
+                response
+              );
+            }
+          } else if (isUniFiOSFormat) {
+            // UniFi OS format - success is indicated by presence of user data
+            // No additional check needed, presence of user data indicates success
+          } else {
+            // Unknown format
+            throw new AuthenticationError(
+              'Unknown response format from UniFi controller',
+              response
+            );
+          }
+
+          // Update session info
+          this.sessionInfo = {
+            isAuthenticated: true,
+            loginTime: new Date(),
+            lastActivity: new Date(),
+            username: this.config.username,
+            site: this.config.site || 'default'
+          };
+
+          return; // Success, exit the function
+        } catch (error) {
+          lastError = error as Error;
+          
+          // If it's not a 404 error, don't try other endpoints
+          if (error instanceof Error && !error.message.includes('404') && !error.message.includes('not found')) {
+            break;
+          }
+          
+          // Continue to next endpoint if this was a 404
+          continue;
+        }
       }
 
-      // Update session info
-      this.sessionInfo = {
-        isAuthenticated: true,
-        loginTime: new Date(),
-        lastActivity: new Date(),
-        username: this.config.username,
-        site: this.config.site || 'default'
-      };
-
+      // If we get here, all endpoints failed
+      this.sessionInfo = { isAuthenticated: false };
+      
+      if (lastError instanceof AuthenticationError) {
+        throw lastError;
+      }
+      
+      const errorMessage = lastError instanceof Error ? lastError.message : String(lastError);
+      throw new AuthenticationError(
+        `Login failed: ${errorMessage}`,
+        lastError
+      );
     } catch (error) {
       this.sessionInfo = { isAuthenticated: false };
       

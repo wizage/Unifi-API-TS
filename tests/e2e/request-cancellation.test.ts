@@ -262,6 +262,13 @@ describe.skip('Request Cancellation E2E Tests', () => {
         'wpapsk',
         'wpa2',
         'ccmp',
+        false, // vlanEnabled
+        undefined, // vlanId
+        false, // uapsdEnabled
+        false, // scheduleEnabled
+        undefined, // schedule
+        undefined, // apGroupIds
+        undefined, // additionalPayload
         { signal: abortController.signal }
       )).rejects.toThrow('Request was cancelled');
     });

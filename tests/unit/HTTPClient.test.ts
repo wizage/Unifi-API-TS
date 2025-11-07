@@ -59,7 +59,9 @@ describe('HTTPClient', () => {
       expect(client).toBeInstanceOf(HTTPClient);
     });
 
-    it('should not create httpsAgent when verifySsl is true', () => {
+    it('should not modify NODE_TLS_REJECT_UNAUTHORIZED when verifySsl is true', () => {
+      const originalValue = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+      
       const sslConfig = {
         baseURL: 'https://test.local:8443',
         verifySsl: true
@@ -67,8 +69,7 @@ describe('HTTPClient', () => {
       
       new HTTPClient(sslConfig);
       
-      const call = mockedAxios.create.mock.calls[mockedAxios.create.mock.calls.length - 1]?.[0];
-      expect(call?.httpsAgent).toBeUndefined();
+      expect(process.env.NODE_TLS_REJECT_UNAUTHORIZED).toBe(originalValue);
     });
 
     it('should create axios instance with correct config', () => {
@@ -82,9 +83,21 @@ describe('HTTPClient', () => {
         'User-Agent': 'UniFi-API-TypeScript-Client/1.0.0'
       });
       
-      // Check that httpsAgent is properly configured when verifySsl is false
-      expect(call?.httpsAgent).toBeDefined();
-      expect((call?.httpsAgent as any)?.options?.rejectUnauthorized).toBe(false);
+      // No custom httpsAgent should be set to avoid conflicts with axios-cookiejar-support
+      expect(call?.httpsAgent).toBeUndefined();
+    });
+
+    it('should set NODE_TLS_REJECT_UNAUTHORIZED when verifySsl is false', () => {
+      const originalValue = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+      
+      expect(process.env.NODE_TLS_REJECT_UNAUTHORIZED).toBe('0');
+      
+      // Restore original value for other tests
+      if (originalValue === undefined) {
+        delete process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+      } else {
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = originalValue;
+      }
     });
 
     it('should setup interceptors', () => {

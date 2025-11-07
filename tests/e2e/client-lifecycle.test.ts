@@ -213,9 +213,11 @@ describe('UniFi Client E2E Tests', () => {
 
     it('should retrieve system information', async () => {
       const sysInfo = await client.statSysinfo();
-      expect(sysInfo).toHaveProperty('hostname');
-      expect(sysInfo).toHaveProperty('version');
-      expect(sysInfo).toHaveProperty('uptime');
+      expect(Array.isArray(sysInfo)).toBe(true);
+      expect(sysInfo.length).toBeGreaterThan(0);
+      expect(sysInfo[0]).toHaveProperty('hostname');
+      expect(sysInfo[0]).toHaveProperty('version');
+      expect(sysInfo[0]).toHaveProperty('uptime');
     });
 
     it('should retrieve events and alarms', async () => {
